@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery-3.5.1.min.js"></script>
+
+    <script>
+      $(() =>{
+
+        $('#but1').click(()=>{
+
+            let y= $('#bookid').val();
+            //////
+             
+            let ajaxparams ={
+                data:{x:y},
+                url: "http://localhost:900/getbook",
+                type: "get",
+                dataType: "json",
+                success : (output) => {
+                    if(output.empfoundstatus){
+                        $("#msg1").text("emp details found");
+                        $("#bookid").val(output.book.bookid);
+                        $("#bookname").val(output.book.bookname);
+                        $("#price").val(output.book.price);
+                        //$("#msg").text(////////)
+                    }
+                    else {
+                        $("msg1").text("emp details not found");
+                        $("#bookid").val("");
+                        $("#bookname").val("");
+                        $("#price").val("");
+                    }
+                }
+            }
+
+        });
+
+
+
+       $("#bookid").blur(() => {
+        ///////
+
+        let ajaxparams = {
+            data: {},
+            url: "http://localhost:900/getall",
+            type: "get",
+            dataType: "json",
+            success: (output) => {
+                boo = output;
+                let bookcontents = "";
+                
+                for(let i=0; i<boo.length; i++){
+                    bookcontents += 
+                    boo[i].bookid + " " + boo[i].bookname + " " + boo[i].price;
+                }
+                $("#msg").html(bookcontents);
+            },
+            error : (error) => {
+                console.log("failure"+ error);
+            },
+        };
+        $.ajax(ajaxparams);
+
+       });
+       
+
+      });
+
+    </script>
+</head>
+<body>
+    BOOK Id :<input type="text" id="bookid" > <span id="msg1"> Book not found </span> <br>
+    Book Name :<input type="text" id="bookname" > <br>
+    Price :<input type="text" id="price"> <br><br>
+    <input type="button" id="but1"  value="add a book"> <br>
+
+    <p id="msg"> 
+
+    </p>
+
+</body>
+</html>
+	
